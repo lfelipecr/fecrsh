@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_order_generate_xml,order.generate.xml,model_order_generate_xml,base.group_user,1,1,1,1
+access_order_send_mail,order.send.mail,model_order_send_mail,base.group_user,1,1,1,1

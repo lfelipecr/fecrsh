@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
+
+        <xpath expr="//div[hasclass('cashier')]" position="after">
+            <t t-if="receipt.tipo_documento == 'TE' and receipt.secuencia">
+                <div><span>TIQUETE ELECTRÓNICO</span></div>
+
+            </t>
+            <t t-if="receipt.tipo_documento == 'FE' and receipt.secuencia">
+                <div><span>FACTURA ELECTRÓNICA</span></div>
+
+            </t>
+            <t t-if="receipt.client">
+                <div style="text-align:left;font-size:12px">
+                    <span>Cliente: <t t-esc='receipt.client.name'/> </span>
+                </div>
+                <div style="text-align:left;font-size:12px">
+                    <span>
+                        <t t-if="receipt.client.identification_id">
+                            <t t-esc='receipt.client.identification_id[1]'/>
+                        </t>
+                        <t t-else="">
+                            Documento
+                        </t>
+                        :
+                        <t t-esc='receipt.client.vat'/> </span>
+                </div>
+                <div style="text-align:left;font-size:12px">
+                    <span>Email: <t t-esc='receipt.client.email'/> </span>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('pos-receipt-order-data')]" position="before">
+             <div class="pos-receipt-contact">
+                 <t t-if="receipt.secuencia">
+                      <div style="text-align:left;font-size:10px">
+                     <span>Consecutivo: </span>
+                     <t t-esc="receipt.secuencia"/>
+                 </div>
+                 </t>
+                 <t t-if="receipt.numero_electronico">
+                      <div style="text-align:left">
+                        <span style="font-size:10px">Clave: <t t-esc="receipt.numero_electronico "/></span>
+                     </div>
+                 </t>
+
+             </div>
+        </xpath>
+    </t>
+</templates>

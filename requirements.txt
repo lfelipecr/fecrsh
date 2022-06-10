@@ -1,0 +1,8 @@
+jsonschema==3.2.0
+phonenumbers==8.9.10
+pyOpenSSL==20.0.1
+PyPDF2==1.26.0
+suds-py3==1.4.4.1
+urlparse3==1.1
+xades==0.2.1
+xmlsig==0.1.3

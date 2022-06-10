@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--TODO: ACCOUNT MOVE FORM -->
+        <record id="view_move_expense_inherit_form" model="ir.ui.view">
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_cr_electronic_invoice.view_move_exoneration_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@id='other_tab']" position="inside">
+                    <group id="expenses" attrs="{'invisible': [('move_type','!=','in_invoice')]}">
+                        <field name="expense_id"/>
+                        <field name="expense_sheet_id"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+          <!--TODO: ACCOUNT MOVE TREE -->
+        <record id="view_invoice_expense_tree" model="ir.ui.view">
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_invoice_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                   <attribute name="invisible">0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
