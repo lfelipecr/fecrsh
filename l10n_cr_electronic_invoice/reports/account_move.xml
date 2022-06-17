@@ -292,7 +292,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.total_services_taxed" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.total_services_taxed" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -302,7 +302,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.total_services_exempt" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.total_services_exempt" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -311,7 +311,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.total_products_taxed" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.total_products_taxed" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -321,7 +321,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.total_products_exempt" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.total_products_exempt" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -330,7 +330,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.total_taxed" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.total_taxed" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -339,7 +339,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.total_exempt" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.total_exempt" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -348,7 +348,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.total_sale" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.total_sale" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -357,7 +357,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.total_discount" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.total_discount" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -366,7 +366,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.amount_untaxed" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.amount_untaxed" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -376,7 +376,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.amount_tax" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.amount_tax" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -385,7 +385,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.total_others" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.total_others" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -394,7 +394,7 @@
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
-                            <span t-field="o.amount_total" t-options="{'widget': 'float', 'precision': 2}"/>
+                            <span t-field="o.amount_total" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                 </table>

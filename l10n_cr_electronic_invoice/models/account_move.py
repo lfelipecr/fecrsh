@@ -1251,3 +1251,6 @@ class AccountInvoice(models.Model):
                 #     _logger.warning("Mail no sended - Invoice rejected")
                 # elif state == "rechazado":
                 #     invoice._process_rejection(state)
+    
+    
+    

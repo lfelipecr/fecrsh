@@ -20,3 +20,4 @@ class InvoiceLineElectronic(models.Model):
 
 
     info_json = fields.Text('Información')
+
