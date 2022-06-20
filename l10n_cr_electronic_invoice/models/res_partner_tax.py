@@ -64,13 +64,13 @@ class ResPartnerTax(models.Model):
         if self.partner_id:
             if not self.partner_id.exoneration_number:
                 self.partner_id.exoneration_number = self.id
-
-#    @api.depends('numero_documento', 'partner_id')
-#    def name_get(self):
-#        res = []
-#        for record in self:
-#            name = record.numero_documento
-#            if record.partner_id and record.numero_documento:
-#                name = name + ' / ' + record.partner_id.name
-#           res.append((record.id, name))
-#        return res
+    
+    @api.depends('numero_documento', 'partner_id')
+    def name_get(self):
+        res = []
+        for record in self:
+            name = record.numero_documento
+            if record.partner_id:
+                name = name + ' / ' + record.partner_id.name
+            res.append((record.id, name))
+        return res 
