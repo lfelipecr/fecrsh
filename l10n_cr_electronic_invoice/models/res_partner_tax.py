@@ -26,18 +26,18 @@ class ResPartnerTax(models.Model):
 
     #todo hacer un wizard con esto para que me guarde los datos.
 
-    @api.onchange('numero_documento')
-    def _onchange_numero_documento(self):
-        if self.numero_documento:
-            res = utils.customer_exonerated.find_data(self)
-            if 'numero_documento' in res:
-                self.write(res)
-                self._asigned_to_partner()
-                res['warning'] = {'title': _('Bien!'), 'message': _('Datos encontrados!')}
-                return res
+    #@api.onchange('numero_documento')
+#    def _onchange_numero_documento(self):
+#        #if self.numero_documento:
+#            #res = utils.customer_exonerated.find_data(self)
+#            #if 'numero_documento' in res:
+#                #self.write(res)
+#                #self._asigned_to_partner()
+#                #res['warning'] = {'title': _('Bien!'), 'message': _('Datos encontrados!')}
+#                #return res
 
-            else:
-                return res
+#            #else:
+#                #return res
 
     @api.onchange('fecha_emision')
     def _onchange_fecha_emision(self):
