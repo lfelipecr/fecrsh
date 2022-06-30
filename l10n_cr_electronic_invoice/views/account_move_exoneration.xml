@@ -63,6 +63,8 @@
                     <!--                    <button name="calc_discount" string="Calcular" type="object" icon="fa-caret-right" class="btn btn-link pt-0" />-->
                 </div>
                 <field name="amount_discount" string="Total descontado" invisible="1"/>
+                <field name="check_exoneration" attrs="{'invisible': [('move_type', 'not in', 'out_invoice')], 'readonly':[['state','not in',['draft']]]}"/>
+
             </xpath>
 
             <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="before">
@@ -86,17 +88,24 @@
             </xpath>
 
             <xpath expr="//field[@name='amount_total']" position="before">
-                <field name="amount_gravada" string="Total gravado" class="oe_subtotal_footer_separator"
+               
+                <field name="total_grabado" string="Total gravado" class="oe_subtotal_footer_separator"
                        force_save="1" readonly="1" style="color:#00A09D; font-size: 12px"
-                       attrs="{'invisible': [('partner_tax_id', '=', False)]}"/>
-                <field name="amount_exonerated" string="Total exonerado"
+                       attrs="{'invisible': [('check_exoneration', '=', False)]}"/>
+                <field name="total_exonerado" string="Total exonerado"
                        force_save="1" readonly="1" style="color:#cf6fd5; font-size: 12px"
-                       attrs="{'invisible': [('partner_tax_id', '=', False)]}"/>
+                       attrs="{'invisible': [('check_exoneration', '=', False)]}"/>
                 <field name="amount_discount" string="Total descuento"
                        force_save="1" readonly="1" style="color:#00A09D; font-size: 12px"
                        attrs="{'invisible': [('apply_discount_global', '=', False)]}"/>
+                    
+           
             </xpath>
+            
+          
+            
 
+            
             <xpath expr="//field[@name='narration']" position="attributes">
                 <attribute name="string">Agregue alguna nota ...</attribute>
             </xpath>

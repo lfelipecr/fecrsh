@@ -120,6 +120,25 @@
                     </group>
 
                 </page>
+                <page id="exoneracion" string="Exoneración" attrs="{'invisible': [('check_exoneration', '=', False)]}">
+                    <group>
+                        <group>
+                            <field name="numero_documento" placeholder="Ingrese número de autorización a buscar" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                            <field name="vat" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                            <field name="tax_id" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                            <field name="porcentaje_exoneracion" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                        </group>
+                        <group>
+                            <field name="cabys_ids" widget="many2many_tags" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                            <field name="fecha_emision" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                            <field name="fecha_vencimiento" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                            <field name="institucion" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                           
+                        </group>
+                    </group>
+                        
+
+                </page>
             </xpath>
             <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='discount']" position="after">
                 <field name="discount_note"/>

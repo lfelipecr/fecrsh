@@ -196,6 +196,7 @@ class AccountInvoice(models.Model):
             'total_venta': 0,
             'venta_neta': 0,
             'total_impuesto': 0,
+            
         }
         exo = False
         if self.partner_id.has_exoneration:
@@ -217,9 +218,11 @@ class AccountInvoice(models.Model):
         total_impuesto = self.amount_tax
         total_comprobante = self.amount_total
 
-        amounts['total_gravado'] = round((amounts["service_taxed"] + amounts["product_taxed"]),digits)
+        amounts['service_taxed'] = round((amounts["service_taxed"] ),digits)
+        amounts['product_taxed'] = round(( amounts["product_taxed"] - self.total_exonerado),digits)
+        amounts['total_gravado'] = round((self.total_grabado),digits)
         amounts['total_exento'] = round((amounts["service_no_taxed"] + amounts["product_no_taxed"]),digits)
-        amounts['total_exonerado'] = round((amounts["service_exempt"] + amounts["product_exempt"]),digits)
+        amounts['total_exonerado'] = round((self.total_exonerado),digits)
         amounts['total_venta'] = round((amounts["service_taxed"] + amounts["service_no_taxed"] + amounts["service_exempt"] + amounts["product_taxed"] + amounts["product_no_taxed"] + amounts["product_exempt"]), digits)
         amounts['venta_neta'] = round(amounts['total_venta'], digits) - round(amounts["discount"], digits)
         amounts['total_comprobante'] = round(amounts['venta_neta'] + amounts['total_impuesto'], digits)

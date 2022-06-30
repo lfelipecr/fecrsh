@@ -19,6 +19,7 @@ from . import resolution
 from . import uom
 from . import sale_order
 from . import account_move_exoneration
+from . import account_move_exoneracion
 
 from . import fetchmail
 

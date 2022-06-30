@@ -315,7 +315,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="tg-0pky" colspan="3" rowspan="6"><span t-field="o.narration"/></td>
+                        <td class="tg-0pky" colspan="3" rowspan="7"><span t-field="o.narration"/></td>
                         <td class="field_label">Total mercancias exentas:</td>
                         <td>
                             <span t-field="o.currency_id"/>
@@ -324,13 +324,31 @@
                             <span t-field="o.total_products_exempt" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
-                    <tr>
+                    <tr t-if='o.check_exoneration == True'>
+                        <td class="field_label">Total gravado:</td>
+                        <td>
+                            <span t-field="o.currency_id"/>
+                        </td>
+                        <td class="column_float">
+                            <span t-field="o.total_grabado" t-options="{'widget': 'float', 'precision': 4}"/>
+                        </td>
+                    </tr>
+                    <tr t-if='o.check_exoneration == False'>
                         <td class="field_label">Total gravado:</td>
                         <td>
                             <span t-field="o.currency_id"/>
                         </td>
                         <td class="column_float">
                             <span t-field="o.total_taxed" t-options="{'widget': 'float', 'precision': 4}"/>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td class="field_label">Total exonerado:</td>
+                        <td>
+                            <span t-field="o.currency_id"/>
+                        </td>
+                        <td class="column_float">
+                            <span t-field="o.total_exonerado" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
                     <tr>
@@ -397,6 +415,7 @@
                             <span t-field="o.amount_total" t-options="{'widget': 'float', 'precision': 4}"/>
                         </td>
                     </tr>
+                    
                 </table>
 
                 <!-- Used in inheritance -->

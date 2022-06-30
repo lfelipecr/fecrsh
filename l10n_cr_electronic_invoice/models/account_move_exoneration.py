@@ -185,8 +185,8 @@ class AccountInvoice(models.Model):
     def _compute_amount(self):
         super(AccountInvoice, self)._compute_amount()
         #self.compute_amount_exonerated()
-       # self.compute_amount_discount()
-        #self._check_percentage_global()
+        self.compute_amount_discount()
+        self._check_percentage_global()
 
     def compute_amount_exonerated(self):
         for move in self:
