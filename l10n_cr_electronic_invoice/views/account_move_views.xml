@@ -117,6 +117,8 @@
 
 
                         <field name="electronic_invoice_return_message" invisible="1"/>
+                        <field name="check_exoneration" invisible='1'/>
+
                     </group>
 
                 </page>
