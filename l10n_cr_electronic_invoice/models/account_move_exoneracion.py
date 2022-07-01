@@ -110,17 +110,20 @@ class AccountInvoice(models.Model):
             else:
                 sign = -1
             move.amount_untaxed = sign * (total_untaxed_currency if len(currencies) == 1 else total_untaxed)
-            move.amount_tax = sign * (total_tax_currency if len(currencies) == 1 else total_tax)
             if move.check_exoneration == True:
+                move.amount_tax = (sign * (total_tax_currency if len(currencies) == 1 else total_tax)) - move.total_exonerado 
                 move.amount_total = (sign * (total_currency if len(currencies) == 1 else total)) - move.total_exonerado
                 move.amount_residual = -sign * ((total_residual_currency if len(currencies) == 1 else total_residual) - move.total_exonerado)
                 move.amount_total_signed = (abs(total) if move.move_type == 'entry' else -total - move.total_exonerado) 
+                move.amount_tax_signed = -total_tax - move.total_exonerado
+
             else:
+                move.amount_tax = sign * (total_tax_currency if len(currencies) == 1 else total_tax)
                 move.amount_total = sign * (total_currency if len(currencies) == 1 else total)
                 move.amount_residual = -sign * (total_residual_currency if len(currencies) == 1 else total_residual)
                 move.amount_total_signed = abs(total) if move.move_type == 'entry' else -total
+                move.amount_tax_signed = -total_tax
             move.amount_untaxed_signed = -total_untaxed
-            move.amount_tax_signed = -total_tax
             move.amount_residual_signed = total_residual
 
             currency = len(currencies) == 1 and currencies or move.company_id.currency_id
@@ -149,4 +152,5 @@ class AccountInvoice(models.Model):
                     new_pmt_state = 'reversed'
 
             move.payment_state = new_pmt_state
+    
     

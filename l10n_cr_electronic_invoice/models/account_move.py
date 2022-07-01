@@ -226,12 +226,13 @@ class AccountInvoice(models.Model):
         else: 
             amounts['product_taxed'] = round(( amounts["product_taxed"]),digits)
 
+        amounts['total_impuesto'] = round((self.amount_tax),digits)
         amounts['total_gravado'] = round((self.total_grabado),digits)
         amounts['total_exento'] = round((amounts["service_no_taxed"] + amounts["product_no_taxed"]),digits)
         amounts['total_exonerado'] = round((self.total_exonerado),digits)
-        amounts['total_venta'] = round((amounts["service_taxed"] + amounts["service_no_taxed"] + amounts["service_exempt"] + amounts["product_taxed"] + amounts["product_no_taxed"] + amounts["product_exempt"]), digits)
+        amounts['total_venta'] = round((amounts["service_taxed"] + amounts["service_no_taxed"] + amounts["service_exempt"] + amounts["product_taxed"] + amounts["product_no_taxed"] + amounts["product_exempt"] + self.total_exonerado), digits)
         amounts['venta_neta'] = round(amounts['total_venta'], digits) - round(amounts["discount"], digits)
-        amounts['total_comprobante'] = round(amounts['venta_neta'] + amounts['total_impuesto'], digits)
+        amounts['total_comprobante'] = round((amounts['venta_neta'] + amounts['total_impuesto']), digits)
 
         # for line in self.invoice_line_ids:
         #     if line.display_type:  # Section or note
