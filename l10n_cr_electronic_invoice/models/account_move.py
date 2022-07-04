@@ -196,6 +196,12 @@ class AccountInvoice(models.Model):
             'total_venta': 0,
             'venta_neta': 0,
             'total_impuesto': 0,
+            'check_exo': 0,
+            'type_doc': self.num_doc,
+            'num_doc': self.numero_documento,
+            'institu': self.institucion,
+            'date_emi': self.fecha_emision,
+            'percent_exo': self.porcentaje_exoneracion,
             
         }
         exo = False
@@ -217,20 +223,22 @@ class AccountInvoice(models.Model):
         total_venta_neta = self.amount_untaxed
         total_impuesto = self.amount_tax
         total_comprobante = self.amount_total
-        if amounts['service_taxed'] != 0:
-            amounts['service_taxed'] = round((amounts["service_taxed"] - self.total_exonerado),digits)
-        else:
-            amounts['service_taxed'] = round((amounts["service_taxed"]),digits)
-        if amounts['product_taxed'] != 0:
-            amounts['product_taxed'] = round(( amounts["product_taxed"] - self.total_exonerado),digits)
-        else: 
-            amounts['product_taxed'] = round(( amounts["product_taxed"]),digits)
+        if self.check_exoneration == True:            
+            amounts['check_exo'] = 1
+            if amounts['service_taxed'] != 0:
+                amounts['service_taxed'] = round((amounts["service_taxed"] - self.total_exonerado),digits)
+                amounts['service_exempt'] = round((self.total_exonerado),digits)
+            
+            if amounts['product_taxed'] != 0:
+                amounts['product_taxed'] = round(( amounts["product_taxed"] - self.total_exonerado),digits)
+                amounts['product_exempt'] = round((self.total_exonerado),digits)
+         
 
         amounts['total_impuesto'] = round((self.amount_tax),digits)
         amounts['total_gravado'] = round((self.total_grabado),digits)
         amounts['total_exento'] = round((amounts["service_no_taxed"] + amounts["product_no_taxed"]),digits)
         amounts['total_exonerado'] = round((self.total_exonerado),digits)
-        amounts['total_venta'] = round((amounts["service_taxed"] + amounts["service_no_taxed"] + amounts["service_exempt"] + amounts["product_taxed"] + amounts["product_no_taxed"] + amounts["product_exempt"] + self.total_exonerado), digits)
+        amounts['total_venta'] = round((amounts["service_taxed"] + amounts["service_no_taxed"] + amounts["service_exempt"] + amounts["product_taxed"] + amounts["product_no_taxed"] + amounts["product_exempt"]), digits)
         amounts['venta_neta'] = round(amounts['total_venta'], digits) - round(amounts["discount"], digits)
         amounts['total_comprobante'] = round((amounts['venta_neta'] + amounts['total_impuesto']), digits)
 
@@ -319,6 +327,7 @@ class AccountInvoice(models.Model):
                 'impuestos': impuestos,
                 'impuesto_neto': round(total_tax,digits),
                 'monto_total_linea': round(sub_total + total_tax,digits)
+                
 
             }
 
@@ -467,6 +476,7 @@ class AccountInvoice(models.Model):
             amount_total=self.amount_total_electronic_invoice,
             activity_code=self.activity_id.code,
             tax_status="01",  # TODO check
+            
         )
         xml_signed = cr_edi.utils.sign_xml(
             cert=self.company_id.signature,
@@ -787,6 +797,7 @@ class AccountInvoice(models.Model):
             electronic_number=self.number_electronic,
             issuer=self.company_id,
             receiver=self.partner_id,
+            
         )
         return response_json
 

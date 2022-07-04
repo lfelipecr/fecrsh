@@ -75,20 +75,20 @@
                 <CodigoTarifa>{{tax['codigo_tarifa']}}</CodigoTarifa>
                 <Tarifa>{{tax['tarifa']}}</Tarifa>
                 <Monto>{{tax['monto']}}</Monto>
-                {% if tax['tax'].tax_root %}
+                {% if amounts['check_exo']  == 1 %}
                 <Exoneracion>
-                    <TipoDocumento>{{receiver.type_exoneration.code}}</TipoDocumento>
-                    <NumeroDocumento>{{receiver.exoneration_number.numero_documento}}</NumeroDocumento>
-                    <NombreInstitucion>{{receiver.institution_name}}</NombreInstitucion>
-                    <FechaEmision>{{receiver.date_issue.strftime('%Y-%m-%dT00:00:00')+'-06:00'}}</FechaEmision>
-                    <PorcentajeExoneracion>{{tax['tax'].percentage_exoneration}}</PorcentajeExoneracion>
-                    <MontoExoneracion>{{(line['sub_total'] * (tax['tax'].percentage_exoneration / 100))|round(5)}}</MontoExoneracion>
+                    <TipoDocumento>{{amounts["type_doc"]}}</TipoDocumento>
+                    <NumeroDocumento>{{amounts["num_doc"]}}</NumeroDocumento>
+                    <NombreInstitucion>{{amounts["institu"]}}</NombreInstitucion>
+                    <FechaEmision>{{amounts['date_emi'].strftime('%Y-%m-%dT00:00:00')+'-06:00'}}</FechaEmision>
+                    <PorcentajeExoneracion>{{"%.5f"|format(amounts["percent_exo"])}}</PorcentajeExoneracion>
+                    <MontoExoneracion>{{"%.5f"|format(amounts["total_exonerado"])}}</MontoExoneracion>
                 </Exoneracion>
                 {% endif %}
             </Impuesto>
             {% endfor %}
-            <ImpuestoNeto>{{line['impuesto_neto']}}</ImpuestoNeto>
-            <MontoTotalLinea>{{line['monto_total_linea']}}</MontoTotalLinea>
+            <ImpuestoNeto>{{"%.5f"|format(amounts['total_impuesto'])}}</ImpuestoNeto>
+            <MontoTotalLinea>{{"%.5f"|format(amounts['total_comprobante'])}}</MontoTotalLinea>
         </LineaDetalle>
         {% endfor %}
     </DetalleServicio>

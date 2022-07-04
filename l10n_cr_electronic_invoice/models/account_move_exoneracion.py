@@ -10,6 +10,9 @@ class AccountInvoice(models.Model):
 
     check_exoneration = fields.Boolean(string='Exonerar', default = False)
     vat = fields.Char('Identificación')
+    tip_doc = fields.Many2one('aut.ex', string='Tipo de documento')
+    num_doc = fields.Char(related='tip_doc.code')
+
     numero_documento = fields.Char(string='Número de documento')
     tax_id = fields.Many2one('account.tax', string='Impuesto')
     porcentaje_exoneracion = fields.Float('Porcentaje de exoneración')
@@ -55,7 +58,7 @@ class AccountInvoice(models.Model):
         'line_ids.amount_residual',
         'line_ids.amount_residual_currency',
         'line_ids.payment_id.state',
-        'line_ids.full_reconcile_id', 'total_exonerado')
+        'line_ids.full_reconcile_id', 'total_exonerado', 'total_grabado')
     def _compute_amount(self):
         for move in self:
 

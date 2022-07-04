@@ -129,6 +129,9 @@
                             <field name="vat" attrs="{'readonly':[['state','not in',['draft']]]}"/>
                             <field name="tax_id" attrs="{'readonly':[['state','not in',['draft']]]}"/>
                             <field name="porcentaje_exoneracion" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                            <field name="tip_doc"/>
+                            <field name="num_doc"/>
+                            
                         </group>
                         <group>
                             <field name="cabys_ids" widget="many2many_tags" attrs="{'readonly':[['state','not in',['draft']]]}"/>
