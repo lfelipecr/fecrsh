@@ -141,7 +141,7 @@ class AccountInvoice(models.Model):
             "La clave de comprobante debe ser única",
         ),
     ]
-
+ 
     state_email = fields.Selection(selection=STATE_EMAIL, copy=False)
 
     @api.depends('metodo_pago_partner','partner_id', 'payment_method_id')
@@ -200,7 +200,7 @@ class AccountInvoice(models.Model):
             'type_doc': self.num_doc,
             'num_doc': self.numero_documento,
             'institu': self.institucion,
-            'date_emi': self.fecha_emision,
+            'date_emi': self.formato_fecha,
             'percent_exo': self.porcentaje_exoneracion,
             
         }

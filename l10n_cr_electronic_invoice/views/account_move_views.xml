@@ -134,15 +134,17 @@
                             
                         </group>
                         <group>
+
                             <field name="cabys_ids" widget="many2many_tags" attrs="{'readonly':[['state','not in',['draft']]]}"/>
                             <field name="fecha_emision" attrs="{'readonly':[['state','not in',['draft']]]}"/>
+                            <field name="formato_fecha" invisible='1'/>
                             <field name="fecha_vencimiento" attrs="{'readonly':[['state','not in',['draft']]]}"/>
                             <field name="institucion" attrs="{'readonly':[['state','not in',['draft']]]}"/>
                            
                         </group>
-                    </group>
+                    </group> 
                         
-
+   
                 </page>
             </xpath>
             <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='discount']" position="after">

@@ -3,6 +3,7 @@
 from odoo import _, api, fields, models, tools
 from odoo.exceptions import UserError, ValidationError
 from datetime import datetime, date
+import pytz
 
 
 class AccountInvoice(models.Model):
@@ -20,10 +21,18 @@ class AccountInvoice(models.Model):
     fecha_emision = fields.Datetime('Fecha emisión')
     fecha_vencimiento = fields.Datetime('Fecha vencimiento')
     institucion = fields.Char(string='Institución')
-
+    formato_fecha = fields.Char(string="Fecha de emisión de exoneracion", compute='_compute_tz_cr')
     
     total_grabado = fields.Monetary('Total gravado', compute='_compute_exoneracion', default=0.0000, store=True)
     total_exonerado = fields.Monetary('Total exonerado', compute='_compute_exoneracion', default=0.0000, store=True)
+
+    @api.depends('fecha_emision')
+    def _compute_tz_cr(self):
+        for time in self:
+            if time.fecha_emision:
+                time.formato_fecha = (time.fecha_emision).astimezone(pytz.timezone("America/Costa_Rica")).isoformat()
+    
+
 
     @api.depends('invoice_line_ids', 'amount_untaxed', 'amount_tax', 'check_exoneration', 'porcentaje_exoneracion')
     def _compute_exoneracion(self):
