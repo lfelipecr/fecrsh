@@ -15,7 +15,7 @@ class AccountInvoice(models.Model):
 
     numero_documento = fields.Char(string='Número de documento')
     tax_id = fields.Many2one('account.tax', string='Impuesto')
-    porcentaje_exoneracion = fields.Float('Porcentaje de exoneración')
+    porcentaje_exoneracion = fields.Integer('Porcentaje de exoneración')
     cabys_ids = fields.Many2many('cabys', string='Cabys')
     fecha_emision = fields.Datetime('Fecha emisión')
     fecha_vencimiento = fields.Datetime('Fecha vencimiento')
