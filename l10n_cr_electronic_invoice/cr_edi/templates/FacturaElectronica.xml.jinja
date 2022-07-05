@@ -80,7 +80,7 @@
                     <TipoDocumento>{{amounts["type_doc"]}}</TipoDocumento>
                     <NumeroDocumento>{{amounts["num_doc"]}}</NumeroDocumento>
                     <NombreInstitucion>{{amounts["institu"]}}</NombreInstitucion>
-                    <FechaEmision>{{amounts['date_emi'].strftime('%Y-%m-%dT00:00:00.000000')+'-06:00'}}</FechaEmision>
+                    <FechaEmision>{{amounts['date_emi']}}</FechaEmision>
                     <PorcentajeExoneracion>{{(amounts["percent_exo"])}}</PorcentajeExoneracion>
                     <MontoExoneracion>{{"%.5f"|format(amounts["total_exonerado"])}}</MontoExoneracion>
                 </Exoneracion>
