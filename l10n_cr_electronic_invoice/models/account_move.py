@@ -223,6 +223,8 @@ class AccountInvoice(models.Model):
         total_venta_neta = self.amount_untaxed
         total_impuesto = self.amount_tax
         total_comprobante = self.amount_total
+        
+
         if self.check_exoneration == True:            
             amounts['check_exo'] = 1
             if amounts['service_taxed'] != 0:
@@ -233,9 +235,11 @@ class AccountInvoice(models.Model):
                 amounts['product_taxed'] = round(( amounts["product_taxed"] - self.total_exonerado),digits)
                 amounts['product_exempt'] = round((self.total_exonerado),digits)
          
+            amounts['total_gravado'] = round((self.total_grabado),digits)
+        else:
+            amounts['total_gravado'] = round((amounts["service_taxed"] + amounts["product_taxed"]),digits)
 
         amounts['total_impuesto'] = round((self.amount_tax),digits)
-        amounts['total_gravado'] = round((self.total_grabado),digits)
         amounts['total_exento'] = round((amounts["service_no_taxed"] + amounts["product_no_taxed"]),digits)
         amounts['total_exonerado'] = round((self.total_exonerado),digits)
         amounts['total_venta'] = round((amounts["service_taxed"] + amounts["service_no_taxed"] + amounts["service_exempt"] + amounts["product_taxed"] + amounts["product_no_taxed"] + amounts["product_exempt"]), digits)
