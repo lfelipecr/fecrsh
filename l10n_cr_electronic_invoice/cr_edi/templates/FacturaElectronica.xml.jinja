@@ -82,13 +82,13 @@
                     <NombreInstitucion>{{amounts["institu"]}}</NombreInstitucion>
                     <FechaEmision>{{amounts['date_emi']}}</FechaEmision>
                     <PorcentajeExoneracion>{{(amounts["percent_exo"])}}</PorcentajeExoneracion>
-                    <MontoExoneracion>{{"%.5f"|format(amounts["total_exonerado"])}}</MontoExoneracion>
+                    <MontoExoneracion>{{"%.4f"|format(amounts["total_exonerado"])}}</MontoExoneracion>
                 </Exoneracion>
                 {% endif %}
             </Impuesto>
             {% endfor %}
-            <ImpuestoNeto>{{"%.5f"|format(amounts['total_impuesto'])}}</ImpuestoNeto>
-            <MontoTotalLinea>{{"%.5f"|format(amounts['total_comprobante'])}}</MontoTotalLinea>
+            <ImpuestoNeto>{{"%.4f"|format(amounts['total_impuesto'])}}</ImpuestoNeto>
+            <MontoTotalLinea>{{"%.4f"|format(amounts['total_comprobante'])}}</MontoTotalLinea>
         </LineaDetalle>
         {% endfor %}
     </DetalleServicio>
@@ -97,21 +97,21 @@
             <CodigoMoneda>{{document.currency_id.name}}</CodigoMoneda>
             <TipoCambio>{{(currency_rate)|round(5)}}</TipoCambio>
         </CodigoTipoMoneda>
-        <TotalServGravados>{{"%.5f"|format(amounts["service_taxed"])}}</TotalServGravados>
-        <TotalServExentos>{{"%.5f"|format(amounts["service_no_taxed"])}}</TotalServExentos>
-        <TotalServExonerado>{{"%.5f"|format(amounts["service_exempt"])}}</TotalServExonerado>
-        <TotalMercanciasGravadas>{{"%.5f"|format(amounts["product_taxed"])}}</TotalMercanciasGravadas>
-        <TotalMercanciasExentas>{{"%.5f"|format(amounts["product_no_taxed"])}}</TotalMercanciasExentas>
-        <TotalMercExonerada>{{"%.5f"|format(amounts["product_exempt"])}}</TotalMercExonerada>
-        <TotalGravado>{{"%.5f"|format(amounts["total_gravado"])}}</TotalGravado>
-        <TotalExento>{{"%.5f"|format(amounts["total_exento"])}}</TotalExento>
-        <TotalExonerado>{{"%.5f"|format(amounts["total_exonerado"])}}</TotalExonerado>
-        <TotalVenta>{{"%.5f"|format(amounts['total_venta'])}}</TotalVenta>
-        <TotalDescuentos>{{"%.5f"|format(amounts["discount"])}}</TotalDescuentos>
-        <TotalVentaNeta>{{"%.5f"|format(amounts['venta_neta'])}}</TotalVentaNeta>
-        <TotalImpuesto>{{"%.5f"|format(amounts['total_impuesto'])}}</TotalImpuesto>
-        <TotalOtrosCargos>{{"%.5f"|format(amounts["other_charges"])}}</TotalOtrosCargos>
-        <TotalComprobante>{{"%.5f"|format(amounts['total_comprobante'])}}</TotalComprobante>
+        <TotalServGravados>{{"%.4f"|format(amounts["service_taxed"])}}</TotalServGravados>
+        <TotalServExentos>{{"%.4f"|format(amounts["service_no_taxed"])}}</TotalServExentos>
+        <TotalServExonerado>{{"%.4f"|format(amounts["service_exempt"])}}</TotalServExonerado>
+        <TotalMercanciasGravadas>{{"%.4f"|format(amounts["product_taxed"])}}</TotalMercanciasGravadas>
+        <TotalMercanciasExentas>{{"%.4f"|format(amounts["product_no_taxed"])}}</TotalMercanciasExentas>
+        <TotalMercExonerada>{{"%.4f"|format(amounts["product_exempt"])}}</TotalMercExonerada>
+        <TotalGravado>{{"%.4f"|format(amounts["total_gravado"])}}</TotalGravado>
+        <TotalExento>{{"%.4f"|format(amounts["total_exento"])}}</TotalExento>
+        <TotalExonerado>{{"%.4f"|format(amounts["monto_exonerado"])}}</TotalExonerado>
+        <TotalVenta>{{"%.4f"|format(amounts['total_venta'])}}</TotalVenta>
+        <TotalDescuentos>{{"%.4f"|format(amounts["discount"])}}</TotalDescuentos>
+        <TotalVentaNeta>{{"%.4f"|format(amounts['venta_neta'])}}</TotalVentaNeta>
+        <TotalImpuesto>{{"%.4f"|format(amounts['total_impuesto'])}}</TotalImpuesto>
+        <TotalOtrosCargos>{{"%.4f"|format(amounts["other_charges"])}}</TotalOtrosCargos>
+        <TotalComprobante>{{"%.4f"|format(amounts['total_comprobante'])}}</TotalComprobante>
     </ResumenFactura>
      <Otros>
         {% if document.order_purchase %}

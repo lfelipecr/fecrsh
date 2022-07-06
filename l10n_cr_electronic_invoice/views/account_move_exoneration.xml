@@ -98,6 +98,12 @@
                 <field name="amount_tax" string="Impuestos netos"
                        force_save="1" readonly="1" style="color:#84b6f4; font-size: 12px"
                        attrs="{'invisible': [('check_exoneration', '=', False)]}"/>
+                <field name="monto_exonerado" string="monto_exonerado"
+                       force_save="1" readonly="1" style="color:#000000; font-size: 12px"
+                       invisible="1"/>
+                <field name="monto_grabado" string="monto_grabado"
+                       force_save="1" readonly="1" style="color:#000000; font-size: 12px"
+                       invisible="1"/>
                 <field name="amount_discount" string="Total descuento"
                        force_save="1" readonly="1" style="color:#00A09D; font-size: 12px"
                        attrs="{'invisible': [('apply_discount_global', '=', False)]}"/>

@@ -202,6 +202,7 @@ class AccountInvoice(models.Model):
             'institu': self.institucion,
             'date_emi': self.formato_fecha,
             'percent_exo': self.porcentaje_exoneracion,
+            'monto_exonerado': self.monto_exonerado,
             
         }
         exo = False
@@ -228,19 +229,20 @@ class AccountInvoice(models.Model):
         if self.check_exoneration == True:            
             amounts['check_exo'] = 1
             if amounts['service_taxed'] != 0:
-                amounts['service_taxed'] = round((amounts["service_taxed"] - self.total_exonerado),digits)
-                amounts['service_exempt'] = round((self.total_exonerado),digits)
+                amounts['service_taxed'] = round((self.monto_grabado),digits)
+                amounts['service_exempt'] = round((self.monto_exonerado),digits)
             
             if amounts['product_taxed'] != 0:
-                amounts['product_taxed'] = round(( amounts["product_taxed"] - self.total_exonerado),digits)
-                amounts['product_exempt'] = round((self.total_exonerado),digits)
-         
-            amounts['total_gravado'] = round((self.total_grabado),digits)
+                amounts['product_taxed'] = round((self.monto_grabado),digits)
+                amounts['product_exempt'] = round((self.monto_exonerado),digits)
+
+            amounts['total_gravado'] = round((self.monto_grabado),digits)
         else:
             amounts['total_gravado'] = round((amounts["service_taxed"] + amounts["product_taxed"]),digits)
 
-        amounts['total_impuesto'] = round((self.amount_tax),digits)
+            amounts['total_impuesto'] = round((self.amount_tax),digits)
         amounts['total_exento'] = round((amounts["service_no_taxed"] + amounts["product_no_taxed"]),digits)
+        amounts['total_impuesto'] = round((self.amount_tax),digits)
         amounts['total_exonerado'] = round((self.total_exonerado),digits)
         amounts['total_venta'] = round((amounts["service_taxed"] + amounts["service_no_taxed"] + amounts["service_exempt"] + amounts["product_taxed"] + amounts["product_no_taxed"] + amounts["product_exempt"]), digits)
         amounts['venta_neta'] = round(amounts['total_venta'], digits) - round(amounts["discount"], digits)
