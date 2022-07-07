@@ -214,7 +214,7 @@ class AccountInvoice(models.Model):
             line_type = "service" if line['line'].product_id.type == "service" else "product"
             is_tax = "taxed" if line['line'].tax_ids else "no_taxed"
             if exo:
-                amount = round(self.exoneration_cal() * round(line['monto_total'], digits), digits)
+                #amount = round(self.exoneration_cal() * round(line['monto_total'], digits), digits)
                 amounts[line_type + "_" + is_tax] += round(amount,digits)
                 amounts[line_type + "_exempt"] += round(line['monto_total'] - amount, digits)
             else:
