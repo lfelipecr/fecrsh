@@ -27,7 +27,10 @@ class AccountInvoice(models.Model):
 
     iva_condition = fields.Selection(IVA_CONDITION, string=u"Condición IVA", required=False)
 
-
+    xml_to_text = fields.Text('Xml to Text field')
+    rpta_hacienda = fields.Text('DetalleMensaje')
+    
+    
     def _default_date(self):
         return datetime.now().date()
 
@@ -194,7 +197,7 @@ class AccountInvoice(models.Model):
                 amount_exonerated = 0.0
                 amount_gravada = 0.0
 
-                amount_gravada = move.exoneration_cal() * move.amount_untaxed
+               # amount_gravada = move.exoneration_cal() * move.amount_untaxed
                 amount_exonerated = move.amount_untaxed - amount_gravada
 
                 move.amount_gravada = amount_gravada

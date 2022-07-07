@@ -342,10 +342,10 @@ class AccountInvoice(models.Model):
         return lines
 
     # TODO Cálculo para exoneraciones
-    def exoneration_cal(self):
-        if self.partner_tax_id:
-            digits = self.env.ref('l10n_cr_electronic_invoice.fecr_amount_precision').digits
-            return round((1 - ((self.partner_tax_id.percentage_exoneration / 100) * 100) / self.partner_tax_id.tax_root.amount), digits)
+    #def exoneration_cal(self):
+       # if self.partner_tax_id:
+           # digits = self.env.ref('l10n_cr_electronic_invoice.fecr_amount_precision').digits
+           # return round((1 - ((self.partner_tax_id.percentage_exoneration / 100) * 100) / self.partner_tax_id.tax_root.amount), digits)
 
     @api.constrains("xml_supplier_approval")
     def _verify_xml_supplier_approval(self):
