@@ -197,7 +197,7 @@ class AccountInvoice(models.Model):
                 amount_exonerated = 0.0
                 amount_gravada = 0.0
 
-               # amount_gravada = move.exoneration_cal() * move.amount_untaxed
+                amount_gravada = move.exoneration_cal() * move.amount_untaxed
                 amount_exonerated = move.amount_untaxed - amount_gravada
 
                 move.amount_gravada = amount_gravada
