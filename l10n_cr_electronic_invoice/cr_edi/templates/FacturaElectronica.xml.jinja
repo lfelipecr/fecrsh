@@ -87,8 +87,14 @@
                 {% endif %}
             </Impuesto>
             {% endfor %}
+            {% if amounts['check_exo']  == 1 %}
             <ImpuestoNeto>{{"%.4f"|format(amounts['total_impuesto'])}}</ImpuestoNeto>
             <MontoTotalLinea>{{"%.4f"|format(amounts['total_comprobante'])}}</MontoTotalLinea>
+            {% endif %}
+            {% if amounts['check_exo']  == 0 %}
+            <ImpuestoNeto>{{line['impuesto_neto']}}</ImpuestoNeto>
+            <MontoTotalLinea>{{line['monto_total_linea']}}</MontoTotalLinea>
+            {% endif %}
         </LineaDetalle>
         {% endfor %}
     </DetalleServicio>
