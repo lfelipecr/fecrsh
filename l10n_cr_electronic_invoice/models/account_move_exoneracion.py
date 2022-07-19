@@ -30,11 +30,6 @@ class AccountInvoice(models.Model):
 
     rpta_hacienda_string = fields.Text('Monto gravado')
 
-    ac_analytic_id = fields.Many2one('account.analytic.account', string='Analytic Account',
-        index=True, store=True, readonly=False, check_company=True, copy=True)
-
-
-    
        
     @api.depends('fecha_emision')
     def _compute_tz_cr(self):

@@ -86,9 +86,7 @@
             <xpath expr="//field[@name='invoice_line_ids']/tree" position="attributes">
                 <attribute name="decoration-danger">change_color == True</attribute>
             </xpath>
-            <xpath expr="//field[@name='currency_rate_usd_crc']" position="after">
-                <field name="ac_analytic_id" attrs="{'invisible': [('move_type', 'not in', 'out_invoice')], 'readonly':[['state','not in',['draft']]]}"/>
-            </xpath>
+
             <xpath expr="//field[@name='amount_total']" position="before">
                
                 <field name="total_grabado" string="Total gravado" class="oe_subtotal_footer_separator"
