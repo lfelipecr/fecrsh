@@ -28,6 +28,14 @@ class AccountInvoice(models.Model):
     monto_exonerado = fields.Monetary('Monto exonerado', compute='_compute_exoneracion', default=0.0000)
     monto_grabado = fields.Monetary('Monto gravado', compute='_compute_exoneracion', default=0.0000)
 
+    rpta_hacienda_string = fields.Text('Monto gravado')
+
+    ac_analytic_id = fields.Many2one('account.analytic.account', string='Analytic Account',
+        index=True, store=True, readonly=False, check_company=True, copy=True)
+
+
+    
+       
     @api.depends('fecha_emision')
     def _compute_tz_cr(self):
         for tiempo in self:

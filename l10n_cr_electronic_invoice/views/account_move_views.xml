@@ -107,7 +107,7 @@
                         <label for="xml_comprobante" string="Comprobante XML" />
                         <div id="div_xml_comprobante">
                             <field name="xml_comprobante" filename="fname_xml_comprobante" string="Comprobante XML" class="mb-0 oe_inline"
-                                   style="color:#0f4d9b" />
+                                   style="color:#0f4d9b"  />
                             <button name="generate_and_send_invoices" string="Reenviar hacienda" type="object" icon="fa-arrow-right"
                                     class="btn btn-link pt-0"
                                     attrs="{'invisible': ['|', ('state_tributacion','not in', ['error','firma_invalida','na','ne'] ),
@@ -147,6 +147,8 @@
    
                 </page>
             </xpath>
+            
+
             <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='discount']" position="after">
                 <field name="discount_note"/>
             </xpath>
