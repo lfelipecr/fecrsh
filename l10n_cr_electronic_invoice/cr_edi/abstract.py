@@ -31,7 +31,8 @@ class Environment:
         client_id = "api-stag"
         token_endpoint = "https://idp.comprobanteselectronicos.go.cr/auth/realms/rut-stag/protocol/openid-connect/token"
         reception_endpoint = (
-            "https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/recepcion"
+            #"https://api.comprobanteselectronicos.go.cr/recepcion-sandbox/v1/recepcion" Old ENDPOINT
+            "https://api-sandbox.comprobanteselectronicos.go.cr/recepcion/v1/recepcion"
         )
 
     class PRODUCTION:
