@@ -116,7 +116,7 @@ class AccountReportIva(models.TransientModel):
     purchase_iva_condition = fields.Selection([('all','Ambos'),('acreditable','Acreditable'),('not_acreditable','No Acreditable')],
                                               default='all')
 
-    sale_iva_condition = fields.Selection([('acreditable','Acreditable')],default='acreditable')
+    sale_iva_condition = fields.Selection([('acreditable','Acreditable')], default='acreditable')
 
 
     sale_national = fields.Selection(selection=SALE_PURCHASE_TRANSACTION, default='all', string='Tipo Transacción Venta')
@@ -144,8 +144,8 @@ class AccountReportIva(models.TransientModel):
         if self.purchase_iva_condition:
             if self.purchase_iva_condition == 'acreditable':
                 self.sale_iva_condition = 'acreditable'
-            else:
-                self.sale_iva_condition = False
+            # else:
+            #    self.sale_iva_condition = False
 
     #Generar excel
     def process(self):
@@ -155,10 +155,10 @@ class AccountReportIva(models.TransientModel):
         head, header_detalle, body, name, number = header._get_styles(workbook)
 
         sheet_A = workbook.add_worksheet(u'BASES')
-        sheet_A.merge_range('A1:I1', u'Bases disponibles por actividad económica', head)
+        sheet_A.merge_range('A1:H1', u'Bases disponibles por actividad económica', head)
 
         sheet_B = workbook.add_worksheet(u'IMPUESTOS')
-        sheet_B.merge_range('A1:J1', u'Impuesto en compra y venta', head)
+        sheet_B.merge_range('A1:I1', u'Impuesto en compra y venta', head)
 
         init = 2
         for activity in self.activity_ids:

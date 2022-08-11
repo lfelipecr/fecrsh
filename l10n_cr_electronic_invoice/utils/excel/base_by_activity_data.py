@@ -32,7 +32,7 @@ def _data(self,activity):
         ('activity_id','=',activity.id),
         ('state', '=', self.state_odoo),
         '|',('state_tributacion', '=', self.state_hacienda),('state_send_invoice','=',self.state_hacienda),
-        ('date','>=', fecha_inicio), ('date','<=',fecha_fin),
+        ('invoice_date','>=', fecha_inicio), ('invoice_date','<=',fecha_fin),
     ]
 
     cols = {
@@ -59,7 +59,7 @@ def _data(self,activity):
     if self.sale_national in ('national','all'):
         sale_domain_national = sale_domain + [('partner_id.country_id.code','=','CR')]
         sales_moves_nacional = self_move.search(sale_domain_national)
-        if self.sale_type == 'other':  # Bien
+        if self.sale_type == 'other':  # Bien            
             vnt_na_bienes = sales_moves_nacional.invoice_line_ids.filtered(lambda sb: sb.product_id.type != 'service')
         elif self.sale_type == 'service':
             vnt_na_servicios = sales_moves_nacional.invoice_line_ids.filtered(lambda sb: sb.product_id.type == 'service')
@@ -69,8 +69,8 @@ def _data(self,activity):
         else:
             pass
 
-    cols['vnt_na_bienes'] = sumatorias(vnt_na_bienes)
-    cols['vnt_na_servicios'] = sumatorias(vnt_na_servicios)
+    cols['vnt_na_bienes'] = sumatorias(self,vnt_na_bienes)
+    cols['vnt_na_servicios'] = sumatorias(self,vnt_na_servicios)
 
     # --------- VENTAS INTERNACIONALES -------------
 
@@ -89,8 +89,8 @@ def _data(self,activity):
         else:
             pass
 
-    cols['vnt_ex_bienes'] = sumatorias(vnt_ex_bienes)
-    cols['vnt_ex_servicios'] = sumatorias(vnt_ex_servicios)
+    cols['vnt_ex_bienes'] = sumatorias(self,vnt_ex_bienes)
+    cols['vnt_ex_servicios'] = sumatorias(self,vnt_ex_servicios)
 
 
     #TODO: ******************************************************************** COMPRAS ***********************************************
@@ -133,11 +133,11 @@ def _data(self,activity):
                 pass
 
 
-    cols['com_iva_ac_na_bienes'] = sumatorias(com_iva_ac_na_bienes)
-    cols['com_iva_ac_na_servicios'] = sumatorias(com_iva_ac_na_servicios)
+    cols['com_iva_ac_na_bienes'] = sumatorias(self,com_iva_ac_na_bienes)
+    cols['com_iva_ac_na_servicios'] = sumatorias(self,com_iva_ac_na_servicios)
 
-    cols['com_iva_ac_ex_bienes'] = sumatorias(com_iva_ac_ex_bienes)
-    cols['com_iva_ac_ex_servicios'] = sumatorias(com_iva_ac_ex_servicios)
+    cols['com_iva_ac_ex_bienes'] = sumatorias(self,com_iva_ac_ex_bienes)
+    cols['com_iva_ac_ex_servicios'] = sumatorias(self,com_iva_ac_ex_servicios)
 
 
     # --------- COMPRAS NACIONALES E INTERNACIONALES IVA NO ACREDITABLE -------------
@@ -175,17 +175,17 @@ def _data(self,activity):
             else:
                 pass
 
-    cols['com_iva_na_na_bienes'] = sumatorias(com_iva_na_na_bienes)
-    cols['com_iva_na_na_servicios'] = sumatorias(com_iva_na_na_servicios)
+    cols['com_iva_na_na_bienes'] = sumatorias(self,com_iva_na_na_bienes)
+    cols['com_iva_na_na_servicios'] = sumatorias(self,com_iva_na_na_servicios)
 
-    cols['com_iva_na_ex_bienes'] = sumatorias(com_iva_na_ex_bienes)
-    cols['com_iva_na_ex_servicios'] = sumatorias(com_iva_na_ex_servicios)
+    cols['com_iva_na_ex_bienes'] = sumatorias(self,com_iva_na_ex_bienes)
+    cols['com_iva_na_ex_servicios'] = sumatorias(self,com_iva_na_ex_servicios)
 
     return cols
 
 
 
-def sumatorias(move_lines):
+def sumatorias(self,move_lines):
     r_amounts = {
         'amount_1': 0.0,
         'amount_2': 0.0,
@@ -196,21 +196,38 @@ def sumatorias(move_lines):
         'amount_no_hold': 0.0,
         'amount_exonerated': 0.0,
     }
+    
+    move_ids = []
     if move_lines:
         for li in move_lines:
-            move_id = li.move_id
-            for line in move_id.line_ids:
+            move_ids.append(li.move_id.id)
+        invoices = self.env['account.move'].search([('id','in',list(set(move_ids)))])
+        for inv in invoices:
+            for line in inv.line_ids:
                 if line.tax_line_id:
-                    for tax in line.tax_line_id:
+                    for tax in line.tax_line_id:                        
                         if tax.classification_type == 'none':
                             for amount in amounts:
                                 if amount == tax.amount:
-                                    #r_amounts['amount_' + str(amount)] += line.move_id.amount_untaxed
-                                    r_amounts['amount_' + str(amount)] += line.tax_base_amount
+                                    if not inv.check_exoneration:
+                                        r_amounts['amount_' + str(amount)] += line.tax_base_amount if line.move_id.move_type in ('in_invoice','out_invoice') else line.tax_base_amount*-1
+                                    else:
+                                        if inv.tax_id == line.tax_line_id:                                            
+                                            r_amounts['amount_exonerated'] += line.tax_base_amount if line.move_id.move_type in ('in_invoice','out_invoice') else line.tax_base_amount*-1
+                                        else:
+                                            r_amounts['amount_' + str(amount)] += line.tax_base_amount if line.move_id.move_type in ('in_invoice','out_invoice') else line.tax_base_amount*-1
+                                        
                         elif tax.classification_type in classification_type:
                             for cla in classification_type:
                                 if cla == tax.classification_type:
-                                    #r_amounts['amount_' + str(cla)] += line.move_id.amount_untaxed
-                                    r_amounts['amount_' + str(cla)] += line.tax_base_amount
+                                    if not inv.check_exoneration:
+                                        r_amounts['amount_' + str(cla)] += line.tax_base_amount if line.move_id.move_type in ('in_invoice','out_invoice') else line.tax_base_amount*-1
+                                    else:
+                                        if line.tax_id == line.tax_line_id:
+                                            r_amounts['amount_exonerated'] += line.tax_base_amount if line.move_id.move_type in ('in_invoice','out_invoice') else line.tax_base_amount*-1
+                                        else:
+                                            r_amounts['amount_' + str(cla)] += line.tax_base_amount if line.move_id.move_type in ('in_invoice','out_invoice') else line.tax_base_amount*-1
+                                    
+
 
     return r_amounts
