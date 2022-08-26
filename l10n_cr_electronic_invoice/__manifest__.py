@@ -1,10 +1,10 @@
 {
     "name": "FECR",
-    "version": "14.1.0.3",
+    "version": "14.2022.08.26",
     "category": "Accounting",
     "summary": "Factura electrónica para Costa Rica",
-    "author": "XALACHI",
-    "website": "https://github.com/xalachi/fecr",
+    "author": "BIG CLOUD CR SRL",
+    "website": "https://github.com/lfelipecr/fecrsh",
     "license": "LGPL-3",
     "price": 500,
     "currency": "USD",
