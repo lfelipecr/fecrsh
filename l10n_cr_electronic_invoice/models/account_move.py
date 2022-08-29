@@ -619,19 +619,19 @@ class AccountInvoice(models.Model):
         out_invoices = self.env["account.move"].search(
             [
                 ("move_type", "in", ["out_invoice", "out_refund"]),
-                ("state", "in", ["open", "paid"]),
+                ("state", "in", ["posted"]),
                 ("state_tributacion", "in", ["recibido", "procesando", "ne", "error"]),
-            ]
+            ] , limit=10
         )
 
         in_invoices = self.env["account.move"].search(
             [
                 ("move_type", "=", "in_invoice"),
-                ("state", "in", ["open", "paid"]),
+                ("state", "in", ["posted"]),
                 ("tipo_documento", "=", "FEC"),
                 ("state_send_invoice", "in", ["procesando", "ne", "error"]),
                 ("number_electronic", "!=", False),
-            ]
+            ] , limit=10
         )
         return out_invoices | in_invoices
 
@@ -655,17 +655,21 @@ class AccountInvoice(models.Model):
     @api.model
     def query_all_documents_needed(self, max_invoices=10):
         """Query all documents that need to be processed by API
-
         Args:
             max_invoices (int, optional): Max number to be queried in single call. Defaults to 10.
-        """
+        """       
+            
         invoices = self._get_invoices_to_query()
+        for invoice in invoices.filtered(lambda x: x.to_process ==True):
+            invoice.update_state()
 
+            
+        """
         total_invoices = len(invoices)
         current_invoice = 0
 
-        _logger.info("E-INV CR - Query ISR - Invoices to Verify: {}".format(total_invoices))
-        for invoice in invoices[:max_invoices]:
+         _logger.info("E-INV CR - Query ISR - Invoices to Verify: {}".format(total_invoices))
+        for invoice in invoices:
             current_invoice += 1
             _logger.info(
                 _("E-INV CR - Query ISR - Invoice {} / {}  -  number:{}").format(
@@ -681,44 +685,45 @@ class AccountInvoice(models.Model):
             status = response_json["status"]
 
             state = response_json.get("ind-estado")
-            if status != 200:
-                if status == 400:
-                    invoice.state_tributacion = "ne"
-                    _logger.warning(
-                        _("E-INV CR - Document: {} not found in ISR. State: {}").format(
-                            invoice.number_electronic, state
-                        )
+            
+            if status == 400:
+                invoice.state_tributacion = "ne"
+                _logger.warning(
+                    _("E-INV CR - Document: {} not found in ISR. State: {}").format(
+                        invoice.number_electronic, state
                     )
-                else:
-                    _logger.error("E-INV CR - Unexpected error in Tax Consultation - Aborting")
-                    continue
-
-                if invoice.move_type == "in_invoice":
-                    invoice.state_send_invoice = state
-                else:
-                    invoice.state_tributacion = state
-
-                if state == "error":
-                    continue
-
-                invoice.fname_xml_respuesta_tributacion = (
-                    "AHC_" + invoice.number_electronic + ".xml"
                 )
-                invoice.xml_respuesta_tributacion = response_json.get("respuesta-xml")
+            else:
+                _logger.error("E-INV CR - Unexpected error in Tax Consultation - Aborting")
+                continue
 
-                # Enviar mail cuando el comprobant es Aceptado por Hacienda
-                if state == "aceptado":
-                    invoice._send_mail()
-                elif state == "firma_invalida":
-                    invoice.state_email = "fe_error"
-                    _logger.warning("Mail no sended - Invoice rejected")
-                elif state == "rechazado":
-                    invoice._process_rejection(state)
+            if invoice.move_type == "in_invoice":
+                invoice.state_send_invoice = state
+            else:
+                invoice.state_tributacion = state
+
+            if state == "error":
+                continue
+
+            invoice.fname_xml_respuesta_tributacion = (
+                "AHC_" + invoice.number_electronic + ".xml"
+            )
+            invoice.xml_respuesta_tributacion = response_json.get("respuesta-xml")
+
+            # Enviar mail cuando el comprobant es Aceptado por Hacienda
+            if state == "aceptado":
+                invoice._send_mail()
+            elif state == "firma_invalida":
+                invoice.state_email = "fe_error"
+                _logger.warning("Mail no sended - Invoice rejected")
+            elif state == "rechazado":
+                invoice._process_rejection(state)"""
 
     def action_check_hacienda(self):
         """Exec update_state in records selected"""
         for invoice in self.filtered("to_process"):
             invoice.update_state()
+    
 
     @api.model
     def _check_hacienda_for_mrs(self, max_invoices=10):
@@ -748,7 +753,7 @@ class AccountInvoice(models.Model):
             [
                 ("to_process", "=", True),
                 ("move_type", "in", ["out_invoice", "out_refund"]),
-                ("state", "in", ["open", "paid"]),
+                ("state", "in", ["posted"]),
                 ("number_electronic", "!=", False),
                 ("invoice_date", ">=", "2018-10-01"),
                 "|",
