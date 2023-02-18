@@ -8,7 +8,7 @@ odoo.define('l10n_cr_pos.Models', function (require) {
     models.load_fields('res.partner', ['identification_id','county_id','district_id','neighborhood_id','payment_methods_id','property_payment_term_id']);
 
     models.load_models([{
-        model:  'identification.type',
+        model:  'l10n_latam.identification.type',
         fields: ['code','name','notes'],
         loaded: function(self, identification){
             self.list_identification = identification;

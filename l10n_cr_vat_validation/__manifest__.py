@@ -4,7 +4,9 @@
     "author": "HomebrewSoft",
     "website": "https://homebrewsoft.dev",
     "license": "LGPL-3",
-    "depends": [],
+    "depends": [
+        'l10n_cr_identification_type'
+    ],
     "data": [
         # security
         # data

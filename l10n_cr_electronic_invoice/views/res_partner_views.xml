@@ -16,7 +16,6 @@
             </field>
             <field name="vat" position="replace"/>
             <field name="website" position="before">
-                <field name="identification_id" string="Tipo identificación"/>
                 <field name="vat" string="Nro Documento"/>
             </field>
             <field name="category_id" position="after">

@@ -681,7 +681,7 @@ def create_partner(self, root, namespaces, company, invoice_payment_term_id):
 
     pais_id = company.country_id.id
     if type_code is not None:
-        type_id = self.env['identification.type'].sudo().search([('code', '=', type_code)], limit=1)
+        type_id = self.env['l10n_latam.identification.type'].sudo().search([('code', '=', type_code)], limit=1)
     if provincia_code is not None:
         provincia = self.env['res.country.state'].sudo().search([('code', '=', provincia_code.text), ('country_id', '=', pais_id)], limit=1)
         if provincia and (canton_code is not None):
