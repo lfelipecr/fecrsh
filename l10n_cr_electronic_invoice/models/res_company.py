@@ -43,7 +43,7 @@ class Company(models.Model):
         string="Cryptographic Key",
     )
     identification_id = fields.Many2one(
-        comodel_name="l10n_latam.identification.type",
+        comodel_name="identification.type",
         string="ID Type",
     )
     frm_ws_identificador = fields.Char(

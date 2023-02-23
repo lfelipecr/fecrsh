@@ -26,14 +26,14 @@ class Partner(models.Model):
             "04": (9, 9),
             "05": (20, 20),
         }
-        # limits = lens[self.identification_id.code]
-        # if not limits[0] <= len(self.vat) <= limits[1]:
-        #     raise UserError(
-        #         _("VAT must be between {} and {} (inclusive) chars long").format(
-        #             limits[0],
-        #             limits[1],
-        #         )
-        #     )
+        limits = lens[self.identification_id.code]
+        if not limits[0] <= len(self.vat) <= limits[1]:
+            raise UserError(
+                _("VAT must be between {} and {} (inclusive) chars long").format(
+                    limits[0],
+                    limits[1],
+                )
+            )
 
     @api.onchange("vat")
     def _get_name_from_vat(self):

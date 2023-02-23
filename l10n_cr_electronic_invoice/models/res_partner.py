@@ -8,12 +8,14 @@ from datetime import datetime, date
 
 from .. import utils
 
-
 class PartnerElectronic(models.Model):
     _inherit = "res.partner"
 
     commercial_name = fields.Char()
-
+    identification_id = fields.Many2one(
+        comodel_name="identification.type",
+        string="ID Type",
+    )
     payment_methods_id = fields.Many2one(
         comodel_name="payment.methods",
     )

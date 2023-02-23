@@ -15,6 +15,7 @@ odoo.define('l10n_cr_pos.Client', function (require) {
     models.PosModel = models.PosModel.extend({
         initialize: function (session, attributes) {
             var res_partner = _.find(this.models, function(model){ return model.model === 'res.partner'; });
+//            res_partner.fields.push('p2p_document_type');
             res_partner.fields.push('identification_id');
             return _super_posmodel.initialize.call(this, session, attributes);
         },
