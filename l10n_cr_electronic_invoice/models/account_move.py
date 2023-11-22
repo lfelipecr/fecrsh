@@ -215,6 +215,7 @@ class AccountInvoice(models.Model):
             is_tax = "taxed" if line['line'].tax_ids else "no_taxed"
             if exo:
                 amount = round(self.exoneration_cal() * round(line['monto_total'], digits), digits)
+                raise ValidationError(f"Monto total: {line['monto_total']}, Monto con exoneración: {amount}, Exoneración : {self.exoneration_cal()}")
                 amounts[line_type + "_" + is_tax] += round(amount,digits)
                 amounts[line_type + "_exempt"] += round(line['monto_total'] - amount, digits)
             else:
