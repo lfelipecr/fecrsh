@@ -141,7 +141,7 @@ class AccountInvoice(models.Model):
             "La clave de comprobante debe ser única",
         ),
     ]
- 
+
     state_email = fields.Selection(selection=STATE_EMAIL, copy=False)
 
     @api.depends('metodo_pago_partner','partner_id', 'payment_method_id')
@@ -203,7 +203,7 @@ class AccountInvoice(models.Model):
             'date_emi': self.formato_fecha,
             'percent_exo': self.porcentaje_exoneracion,
             'monto_exonerado': self.monto_exonerado,
-            
+
         }
         exo = False
         if self.partner_id.has_exoneration:
@@ -224,14 +224,14 @@ class AccountInvoice(models.Model):
         total_venta_neta = self.amount_untaxed
         total_impuesto = self.amount_tax
         total_comprobante = self.amount_total
-        
 
-        if self.check_exoneration == True:            
+
+        if self.check_exoneration == True:
             amounts['check_exo'] = 1
             if amounts['service_taxed'] != 0:
                 amounts['service_taxed'] = round((self.monto_grabado),digits)
                 amounts['service_exempt'] = round((self.monto_exonerado),digits)
-            
+
             if amounts['product_taxed'] != 0:
                 amounts['product_taxed'] = round((self.monto_grabado),digits)
                 amounts['product_exempt'] = round((self.monto_exonerado),digits)
@@ -333,7 +333,7 @@ class AccountInvoice(models.Model):
                 'impuestos': impuestos,
                 'impuesto_neto': round(total_tax,digits),
                 'monto_total_linea': round(sub_total + total_tax,digits)
-                
+
 
             }
 
@@ -345,7 +345,7 @@ class AccountInvoice(models.Model):
     def exoneration_cal(self):
         if self.partner_tax_id:
             digits = self.env.ref('l10n_cr_electronic_invoice.fecr_amount_precision').digits
-            return round((1 - ((self.partner_tax_id.percentage_exoneration / 100) * 100)), digits)
+            return round((1 - ((self.porcentaje_exoneracion / 100) * 100)), digits)
 
     @api.constrains("xml_supplier_approval")
     def _verify_xml_supplier_approval(self):
@@ -482,7 +482,7 @@ class AccountInvoice(models.Model):
             amount_total=self.amount_total_electronic_invoice,
             activity_code=self.activity_id.code,
             tax_status="01",  # TODO check
-            
+
         )
         xml_signed = cr_edi.utils.sign_xml(
             cert=self.company_id.signature,
@@ -657,13 +657,13 @@ class AccountInvoice(models.Model):
         """Query all documents that need to be processed by API
         Args:
             max_invoices (int, optional): Max number to be queried in single call. Defaults to 10.
-        """       
-            
+        """
+
         invoices = self._get_invoices_to_query()
         for invoice in invoices.filtered(lambda x: x.to_process ==True):
             invoice.update_state()
 
-            
+
         """
         total_invoices = len(invoices)
         current_invoice = 0
@@ -685,7 +685,7 @@ class AccountInvoice(models.Model):
             status = response_json["status"]
 
             state = response_json.get("ind-estado")
-            
+
             if status == 400:
                 invoice.state_tributacion = "ne"
                 _logger.warning(
@@ -723,7 +723,7 @@ class AccountInvoice(models.Model):
         """Exec update_state in records selected"""
         for invoice in self.filtered("to_process"):
             invoice.update_state()
-    
+
 
     @api.model
     def _check_hacienda_for_mrs(self, max_invoices=10):
@@ -808,7 +808,7 @@ class AccountInvoice(models.Model):
             electronic_number=self.number_electronic,
             issuer=self.company_id,
             receiver=self.partner_id,
-            
+
         )
         return response_json
 
@@ -1283,6 +1283,6 @@ class AccountInvoice(models.Model):
                 #     _logger.warning("Mail no sended - Invoice rejected")
                 # elif state == "rechazado":
                 #     invoice._process_rejection(state)
-    
-    
-    
+
+
+
