@@ -225,6 +225,7 @@ class AccountInvoice(models.Model):
         total_impuesto = self.amount_tax
         total_comprobante = self.amount_total
 
+        raise ValidationError(f"Montos: {str(amounts)}, monto gravado: {self.monto_grabado}, Monto exonerado: {self.monto_exonerado}")
 
         if self.check_exoneration == True:
             amounts['check_exo'] = 1
