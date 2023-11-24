@@ -244,6 +244,9 @@ def gen_from_template(
     else:
         lineas = document._get_lines_xml(lines)
         amounts = document.get_amounts(lineas)
+
+        raise UserError(f"LINEAS: {str(lineas)}, Montos: {str(amounts)}")
+
         if document.tipo_documento == 'TE':
             phone_obj_receiver = None
         else:
