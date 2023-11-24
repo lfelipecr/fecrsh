@@ -22,15 +22,15 @@ class AccountInvoice(models.Model):
     fecha_vencimiento = fields.Datetime('Fecha vencimiento')
     institucion = fields.Char(string='Institución')
     formato_fecha = fields.Char(string="Fecha de emisión de exoneracion", compute='_compute_tz_cr', default=" ")
-    
+
     total_grabado = fields.Monetary('Total gravado', compute='_compute_exoneracion', default=0.0000)
-    total_exonerado = fields.Monetary('Total exonerado', compute='_compute_exoneracion', default=0.0000)    
+    total_exonerado = fields.Monetary('Total exonerado', compute='_compute_exoneracion', default=0.0000)
     monto_exonerado = fields.Monetary('Monto exonerado', compute='_compute_exoneracion', default=0.0000)
     monto_grabado = fields.Monetary('Monto gravado', compute='_compute_exoneracion', default=0.0000)
 
     rpta_hacienda_string = fields.Text('Monto gravado')
 
-       
+
     @api.depends('fecha_emision')
     def _compute_tz_cr(self):
         for tiempo in self:
@@ -47,21 +47,21 @@ class AccountInvoice(models.Model):
             if rec.check_exoneration == True:
                 rec.total_grabado = rec.amount_untaxed * (1 - (rec.porcentaje_exoneracion / 100))
                 rec.total_exonerado = rec.amount_untaxed * rec.porcentaje_exoneracion / 100
-                if rec.amount_untaxed !=0 and rec.amount_tax !=0:
+                if rec.amount_untaxed !=0:
                     ##actualizar en caso de utilizar productos y servicios
                     rec.monto_exonerado = ((rec.porcentaje_exoneracion / 100) / ((rec.total_exonerado + rec.amount_tax)/rec.amount_untaxed)) * rec.amount_untaxed
                     rec.monto_grabado = (1 - ((rec.porcentaje_exoneracion / 100) / ((rec.total_exonerado + rec.amount_tax)/rec.amount_untaxed))) * rec.amount_untaxed
                 else:
-                    rec.monto_exonerado = 0 
+                    rec.monto_exonerado = 0
                     rec.monto_grabado = 0
 
             else:
-                rec.total_grabado = 0 
+                rec.total_grabado = 0
                 rec.total_exonerado = 0
-                rec.monto_exonerado = 0 
+                rec.monto_exonerado = 0
                 rec.monto_grabado = 0
 
-                
+
     @api.depends(
         'line_ids.matched_debit_ids.debit_move_id.move_id.payment_id.is_matched',
         'line_ids.matched_debit_ids.debit_move_id.move_id.line_ids.amount_residual',
@@ -132,10 +132,10 @@ class AccountInvoice(models.Model):
                 sign = -1
             move.amount_untaxed = sign * (total_untaxed_currency if len(currencies) == 1 else total_untaxed)
             if move.check_exoneration == True:
-                move.amount_tax = (sign * (total_tax_currency if len(currencies) == 1 else total_tax)) - move.total_exonerado 
+                move.amount_tax = (sign * (total_tax_currency if len(currencies) == 1 else total_tax)) - move.total_exonerado
                 move.amount_total = (sign * (total_currency if len(currencies) == 1 else total)) - move.total_exonerado
                 move.amount_residual = -sign * ((total_residual_currency if len(currencies) == 1 else total_residual) - move.total_exonerado)
-                move.amount_total_signed = (abs(total) if move.move_type == 'entry' else -total - move.total_exonerado) 
+                move.amount_total_signed = (abs(total) if move.move_type == 'entry' else -total - move.total_exonerado)
                 move.amount_tax_signed = -total_tax - move.total_exonerado
 
             else:
@@ -173,5 +173,4 @@ class AccountInvoice(models.Model):
                     new_pmt_state = 'reversed'
 
             move.payment_state = new_pmt_state
-    
-    
+
