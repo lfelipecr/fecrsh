@@ -14,7 +14,7 @@
                 <!--para proveedores-->
                 <button name="action_check_hacienda" type="object" string="Consultar a Hacienda" attrs="{'invisible':[                     '|','|',                     ('state_send_invoice', 'in', (False, 'aceptado','rechazado')),                     ('move_type','not in',['in_invoice','in_refund']),                     ('state','in',('draft','cancel')),                 ]}"/>
                 <button name="generate_and_send_invoices" type="object" string="Enviar a Hacienda" confirm="Está seguro de continuar este proceso ?" attrs="{'invisible':[                     '|','|','|',                     ('state_send_invoice', '!=', False),                     ('electronic_sequence', '=', False),                     ('move_type','not in',['in_invoice','in_refund']),                     ('state','in',('draft','cancel')),                 ]}"/>
-            
+
             </button>
             <!-- enviar e imprimir siempre visible // TODO: Verificar si aplica para los dos botones -->
             <button name="action_invoice_sent" position="attributes">
@@ -89,7 +89,7 @@
                         </div>
 
 
-                        <field name="electronic_invoice_return_message" invisible="1"/>
+                        <field name="electronic_invoice_return_message" string="Respuesta de hacienda" invisible="0" readonly="1"/>
                         <field name="check_exoneration" invisible='1'/>
 
                     </group>
@@ -104,7 +104,7 @@
                             <field name="porcentaje_exoneracion" attrs="{'readonly':[['state','not in',['draft']]], 'required':[('check_exoneration','=', True)]}"/>
                             <field name="tip_doc" attrs="{'readonly':[['state','not in',['draft']]], 'required':[('check_exoneration','=', True)]}"/>
                             <field name="num_doc" invisible='1'/>
-                            
+
                         </group>
                         <group>
 
@@ -113,14 +113,14 @@
                             <field name="formato_fecha" invisible='1'/>
                             <field name="fecha_vencimiento" attrs="{'readonly':[['state','not in',['draft']]]}"/>
                             <field name="institucion" attrs="{'readonly':[['state','not in',['draft']]], 'required':[('check_exoneration','=', True)]}"/>
-                           
+
                         </group>
-                    </group> 
-                        
-   
+                    </group>
+
+
                 </page>
             </xpath>
-            
+
 
             <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='discount']" position="after">
                 <field name="discount_note"/>

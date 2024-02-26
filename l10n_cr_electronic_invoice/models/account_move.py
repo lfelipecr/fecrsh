@@ -75,7 +75,7 @@ class AccountInvoice(models.Model):
         copy=False,
         readonly=True,
     )
-    electronic_invoice_return_message = fields.Text(
+    electronic_invoice_return_message = fields.Text(string="Respuesta de hacienda",
         copy=False,
         readonly=True,
     )
@@ -235,7 +235,7 @@ class AccountInvoice(models.Model):
                 amounts['product_taxed'] = round((self.monto_grabado),digits)
                 amounts['product_exempt'] = round((self.monto_exonerado),digits)
 
-            amounts['total_gravado'] = round((self.monto_grabado),digits)
+            amounts['total_gravado'] = round((self.total_grabado),digits)
         else:
             amounts['total_gravado'] = round((amounts["service_taxed"] + amounts["product_taxed"]),digits)
 
@@ -648,7 +648,9 @@ class AccountInvoice(models.Model):
         inv_xmlns = namespaces.pop(None)
         namespaces["inv"] = inv_xmlns
         detalle_tag = tree.find("inv:DetalleMensaje", namespaces=namespaces)
-
+        #Mandar el mensaje de respuesta en el chatter
+        self.message_post(body=detalle_tag.text)
+        #Guardar el mensaje de respuesta en un campo
         self.electronic_invoice_return_message = detalle_tag.text
 
     @api.model
