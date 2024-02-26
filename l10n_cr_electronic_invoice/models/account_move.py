@@ -649,7 +649,7 @@ class AccountInvoice(models.Model):
         namespaces["inv"] = inv_xmlns
         detalle_tag = tree.find("inv:DetalleMensaje", namespaces=namespaces)
         #Mandar el mensaje de respuesta en el chatter
-        self.message_post(body=detalle_tag.text)
+        # self.message_post(body=detalle_tag.text)
         #Guardar el mensaje de respuesta en un campo
         self.electronic_invoice_return_message = detalle_tag.text
 
