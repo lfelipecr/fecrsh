@@ -4,7 +4,7 @@ import base64
 import logging
 import json
 from lxml import etree
-
+import xmltodict
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import email_re, email_split
@@ -112,6 +112,7 @@ class AccountInvoice(models.Model):
     usd_rate = fields.Float(
         compute="_compute_usd_currency_id",
     )
+    x_error_response = fields.Text(string="Motivo de rechazo")
 
 
     @api.depends("invoice_date", "company_id.currency_id")
@@ -235,7 +236,7 @@ class AccountInvoice(models.Model):
                 amounts['product_taxed'] = round((self.monto_grabado),digits)
                 amounts['product_exempt'] = round((self.monto_exonerado),digits)
 
-            amounts['total_gravado'] = round((self.total_grabado),digits)
+            amounts['total_gravado'] = round((self.monto_grabado),digits)
         else:
             amounts['total_gravado'] = round((amounts["service_taxed"] + amounts["product_taxed"]),digits)
 
@@ -428,6 +429,11 @@ class AccountInvoice(models.Model):
         self.message_post(body=message_body, subtype_xmlid="mail.mt_note", message_type='comment')
 
         """Quitar envío de mail"""
+
+        if self.state_tributacion in ["error", "rechazado"]:
+            error_reponse = self.get_error_message()
+            self.x_error_response = error_reponse
+            self.message_post(body=error_reponse, subtype_xmlid="mail.mt_note", message_type='comment')
 
     def send_mrs_to_hacienda(self):
         """Send message to API"""
@@ -649,7 +655,7 @@ class AccountInvoice(models.Model):
         namespaces["inv"] = inv_xmlns
         detalle_tag = tree.find("inv:DetalleMensaje", namespaces=namespaces)
         #Mandar el mensaje de respuesta en el chatter
-        # self.message_post(body=detalle_tag.text)
+        self.message_post(body=detalle_tag.text)
         #Guardar el mensaje de respuesta en un campo
         self.electronic_invoice_return_message = detalle_tag.text
 
@@ -1287,3 +1293,21 @@ class AccountInvoice(models.Model):
 
 
 
+    def get_xml_values(self, datas):
+        file_content = base64.b64decode(datas)
+        if b'xmlns:schemaLocation' in file_content:
+            file_content = file_content.replace(b'xmlns:schemaLocation', b'xsi:schemaLocation')
+        file_content = file_content.replace(b'cfdi:', b'')
+        file_content = file_content.replace(b'tfd:', b'')
+        try:
+            response = xmltodict.parse(file_content)
+            return response
+        except Exception as e:
+            raise Warning(str(e))
+
+    def get_error_message(self):
+        for rec in self:
+            datas = rec.xml_respuesta_tributacion
+            response = rec.get_xml_values(datas)
+            error_message = response["MensajeHacienda"]["DetalleMensaje"]
+            return error_message

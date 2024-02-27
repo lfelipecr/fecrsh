@@ -89,7 +89,8 @@
                         </div>
 
 
-                        <field name="electronic_invoice_return_message" string="Respuesta de hacienda" invisible="0" readonly="1"/>
+                        <field name="electronic_invoice_return_message" string="Respuesta de hacienda" invisible="1"/>
+                        <field name="x_error_response" attrs="{'invisible': [('state_tributacion','not in',['error','rechazado'])]}" readonly="1"/>
                         <field name="check_exoneration" invisible='1'/>
 
                     </group>
